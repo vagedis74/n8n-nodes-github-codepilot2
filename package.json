@@ -1,0 +1,67 @@
+{
+  "name": "n8n-nodes-github-codepilot",
+  "version": "0.2.0",
+  "description": "n8n community node for GitHub Codepilot - AI-powered vibecoding, workflow building, and MCP integration",
+  "keywords": [
+    "n8n-community-node-package",
+    "github",
+    "codepilot",
+    "copilot",
+    "ai",
+    "code-generation",
+    "vibecoding",
+    "workflow-builder",
+    "mcp"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/vagedis_23/n8n-nodes-github-codepilot",
+  "author": {
+    "name": "vagedis_23"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vagedis_23/n8n-nodes-github-codepilot.git"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials --ext .ts --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/GitHubCodepilotApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/GitHubCodepilot/GitHubCodepilot.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.0",
+    "gulp": "^4.0.2",
+    "jest": "^29.7.0",
+    "n8n-workflow": "^1.0.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
