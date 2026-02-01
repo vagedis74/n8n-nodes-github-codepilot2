@@ -41,6 +41,7 @@ export class GitHubCodepilot implements INodeType {
 					{ name: 'MCP Server', value: 'mcpServer', description: 'Expose n8n capabilities as MCP tools' },
 					{ name: 'Plugin', value: 'plugin', description: 'Manage and execute Copilot plugins' },
 					{ name: 'Super SysAdmin Mode', value: 'superSysAdmin', description: 'Senior IT support specialist for analyzing and solving IT tickets' },
+					{ name: 'Prompt Reviewer', value: 'promptReviewer', description: 'Review and improve agent prompts to senior engineer level' },
 				],
 				default: 'workflowBuilder',
 			},
@@ -126,6 +127,136 @@ export class GitHubCodepilot implements INodeType {
 					{ name: 'Analyze Ticket', value: 'analyzeTicket', action: 'Analyze IT support ticket and provide solution' },
 				],
 				default: 'analyzeTicket',
+			},
+			// Prompt Reviewer Operations
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: { show: { resource: ['promptReviewer'] } },
+				options: [
+					{ name: 'Review Prompts', value: 'reviewPrompts', action: 'Review and improve agent prompts' },
+				],
+				default: 'reviewPrompts',
+			},
+			// Agent Count
+			{
+				displayName: 'How Many Agents/Prompts Do You Want to Provide?',
+				name: 'agentCount',
+				type: 'number',
+				typeOptions: { minValue: 1, maxValue: 9, numberStepSize: 1 },
+				default: 1,
+				displayOptions: { show: { resource: ['promptReviewer'] } },
+			},
+			// Agent Prompt 1
+			{
+				displayName: 'Agent Prompt 1',
+				name: 'agentPrompt1',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [1, 2, 3, 4, 5, 6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 2
+			{
+				displayName: 'Agent Prompt 2',
+				name: 'agentPrompt2',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [2, 3, 4, 5, 6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 3
+			{
+				displayName: 'Agent Prompt 3',
+				name: 'agentPrompt3',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [3, 4, 5, 6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 4
+			{
+				displayName: 'Agent Prompt 4',
+				name: 'agentPrompt4',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [4, 5, 6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 5
+			{
+				displayName: 'Agent Prompt 5',
+				name: 'agentPrompt5',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [5, 6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 6
+			{
+				displayName: 'Agent Prompt 6',
+				name: 'agentPrompt6',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [6, 7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 7
+			{
+				displayName: 'Agent Prompt 7',
+				name: 'agentPrompt7',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [7, 8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 8
+			{
+				displayName: 'Agent Prompt 8',
+				name: 'agentPrompt8',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [8, 9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Agent Prompt 9
+			{
+				displayName: 'Agent Prompt 9',
+				name: 'agentPrompt9',
+				type: 'string',
+				typeOptions: { rows: 6 },
+				displayOptions: { show: { resource: ['promptReviewer'], agentCount: [9] } },
+				default: '',
+				placeholder: 'Enter agent/prompt definition...',
+			},
+			// Prompt Reviewer MCP Server URL (optional)
+			{
+				displayName: 'MCP Server URL',
+				name: 'promptReviewerMcpServerUrl',
+				type: 'string',
+				displayOptions: { show: { resource: ['promptReviewer'] } },
+				default: '',
+				placeholder: 'http://localhost:3000/mcp',
+				description: 'Optional MCP server URL to discover available tools for agent recommendations',
+			},
+			// Load Previously Stored Agents
+			{
+				displayName: 'Load Previously Stored Agents',
+				name: 'loadPreviousAgents',
+				type: 'boolean',
+				displayOptions: { show: { resource: ['promptReviewer'] } },
+				default: false,
+				description: 'Whether to load and include previously reviewed agents from workflow static data',
 			},
 			// Model
 			{
@@ -442,6 +573,87 @@ Rules:
 						}
 						result.ticket = ticket;
 					}
+
+				} else if (resource === 'promptReviewer') {
+					const agentCount = this.getNodeParameter('agentCount', i) as number;
+
+					// Collect filled prompts
+					const prompts: { index: number; prompt: string }[] = [];
+					for (let n = 1; n <= agentCount; n++) {
+						const prompt = this.getNodeParameter(`agentPrompt${n}`, i, '') as string;
+						if (prompt) {
+							prompts.push({ index: n, prompt });
+						}
+					}
+
+					// Optional: discover MCP tools
+					let mcpContext = '';
+					const mcpUrl = this.getNodeParameter('promptReviewerMcpServerUrl', i, '') as string;
+					if (mcpUrl) {
+						try {
+							const toolsResponse = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilotApi', {
+								method: 'POST' as IHttpRequestMethods,
+								url: mcpUrl,
+								body: { jsonrpc: '2.0', id: 1, method: 'tools/list' },
+								json: true,
+							});
+							const tools = (toolsResponse.result?.tools as IDataObject[]) || [];
+							mcpContext = `\nAvailable MCP tools: ${JSON.stringify(tools.map((t: IDataObject) => ({ name: t.name, description: t.description })))}`;
+						} catch {
+							mcpContext = '\nNote: MCP server was unreachable, skipping tool discovery.';
+						}
+					}
+
+					// Optional: load previous agents
+					const staticData = this.getWorkflowStaticData('global');
+					let previousContext = '';
+					const loadPrevious = this.getNodeParameter('loadPreviousAgents', i, false) as boolean;
+					if (loadPrevious && staticData.reviewedAgents) {
+						previousContext = `\nPreviously reviewed agents: ${JSON.stringify(staticData.reviewedAgents)}`;
+					}
+
+					const reviewerSystemPrompt = `You are a senior system, network, and security engineer reviewing AI agent prompts.
+Evaluate each prompt for: specificity, security awareness, operational precision, scope boundaries, and error handling.
+Respond with JSON array:
+[{
+  "agent_index": 1,
+  "original": "the original prompt",
+  "rating": "weak/adequate/strong",
+  "issues": ["list of specific issues"],
+  "recommended_prompt": "the improved prompt",
+  "changes_summary": "what was changed and why"
+}]
+If MCP tools are available, recommend which tools each agent should leverage.
+Keep recommendations actionable. Do not add unnecessary complexity.`;
+
+					const userMessage = `Review these agent/prompt definitions:\n${JSON.stringify(prompts, null, 2)}${mcpContext}${previousContext}`;
+
+					const response = await callCopilotApi(this, model, reviewerSystemPrompt, userMessage, options);
+
+					// Parse structured response
+					try {
+						const jsonMatch = response.match(/\[[\s\S]*\]/);
+						if (jsonMatch) {
+							const parsed = JSON.parse(jsonMatch[0]);
+							result.review = parsed;
+
+							// Store in static data
+							const existing = (staticData.reviewedAgents as IDataObject) || {};
+							const newAgents: IDataObject = {};
+							for (const agent of parsed) {
+								newAgents[`agent_${agent.agent_index}`] = {
+									recommended_prompt: agent.recommended_prompt,
+									rating: agent.rating,
+								};
+							}
+							staticData.reviewedAgents = { ...existing, ...newAgents, timestamp: Date.now() };
+						} else {
+							result.review = { raw: response };
+						}
+					} catch {
+						result.review = { raw: response };
+					}
+					result.agentCount = agentCount;
 				}
 
 				returnData.push({ json: result, pairedItem: { item: i } });
