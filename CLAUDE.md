@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-n8n community node package (`n8n-nodes-github-codepilot`) that integrates GitHub Copilot Chat, GitHub Models API, and MCP (Model Context Protocol) into n8n workflows. The node connects to the Azure Models inference endpoint (`https://models.inference.ai.azure.com/chat/completions`) using GitHub PAT or GitHub App authentication.
+n8n community node package (`n8n-nodes-github-codepilot2`) that integrates GitHub Copilot Chat, GitHub Models API, and MCP (Model Context Protocol) into n8n workflows. The node connects to the Azure Models inference endpoint (`https://models.inference.ai.azure.com/chat/completions`) using GitHub PAT or GitHub App authentication.
 
 ## Build & Development Commands
 
