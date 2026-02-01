@@ -423,7 +423,7 @@ export class GitHubCodepilot implements INodeType {
 				const model = this.getNodeParameter('model', i) as string;
 				const options = this.getNodeParameter('options', i, {}) as IDataObject;
 
-				let result: IDataObject = { resource, operation };
+				const result: IDataObject = { resource, operation };
 
 				if (resource === 'workflowBuilder') {
 					const n8nSystemPrompt = `You are an expert n8n workflow architect. Create valid n8n workflow JSON.
@@ -457,10 +457,10 @@ Return only valid JSON that can be imported into n8n.`;
 					try {
 						const match = response.match(/\{[\s\S]*"nodes"[\s\S]*\}/);
 						if (match) result.workflow = JSON.parse(match[0]);
-					} catch {}
+					} catch { /* JSON extraction is best-effort */ }
 
 				} else if (resource === 'codeAssistant') {
-					let systemPrompt = 'You are an expert programmer.';
+					const systemPrompt = 'You are an expert programmer.';
 					let userMessage = '';
 
 					if (operation === 'chat') {
