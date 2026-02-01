@@ -35,12 +35,15 @@ The package exports exactly two things from `index.ts`:
 
 The `execute()` method routes on `resource` + `operation`, constructs operation-specific system prompts, then calls `callCopilotApi()` which posts to the Azure Models chat completions endpoint. Workflow builder operations include regex-based JSON extraction from AI responses.
 
+**Important:** The API endpoint for AI completions (`models.inference.ai.azure.com`) is hardcoded in the node, separate from the credential's `baseUrl` (which defaults to `api.github.com` and is used for credential validation and MCP requests).
+
 ## n8n Node Conventions
 
 - Node definition follows n8n community node v1 API (`n8nNodesApiVersion: 1`)
 - The `n8n` field in `package.json` registers credential and node paths (must point to `dist/` compiled output)
 - Uses `n8n-workflow` as a peer dependency — types like `INodeType`, `ICredentialType`, `IExecuteFunctions`, `NodeOperationError`
 - ESLint uses `eslint-plugin-n8n-nodes-base` with the `community` preset for n8n-specific rules
+- Build runs `tsc` then `gulp build:icons` — the gulp task copies `nodes/**/*.svg` to `dist/nodes/` since TypeScript doesn't handle SVG files
 
 ## Code Style
 
@@ -52,3 +55,9 @@ The `execute()` method routes on `resource` + `operation`, constructs operation-
 ## Testing
 
 Tests (`test/GitHubCodepilot.test.ts`) validate node and credential metadata/schema — they check that all operations, parameters, models, and configuration options are correctly defined. They do not test API execution.
+
+## Known Issues
+
+- **Tests are out of sync with implementation** — tests expect operations and models from an older version of the node (e.g., `chatCompletion`, `o1-preview`, `o1-mini`) that no longer exist.
+- **mcpServer and plugin resources are stubs** — They return hardcoded/mock data, not real functionality.
+- **Fragile JSON extraction** — Workflow builder and superSysAdmin use regex to extract JSON from AI responses, which can fail on nested structures.
