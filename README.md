@@ -158,7 +158,7 @@ Enable "Continue On Fail" to process multiple items even if some fail.
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/n8n-nodes-github-copilot.git
+git clone https://github.com/vagedis74/n8n-nodes-github-codepilot2.git
 
 # Install dependencies
 npm install
