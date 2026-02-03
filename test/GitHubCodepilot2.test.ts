@@ -1,20 +1,20 @@
-import { GitHubCodepilot } from '../nodes/GitHubCodepilot/GitHubCodepilot.node';
-import { GitHubCodepilotApi } from '../credentials/GitHubCodepilotApi.credentials';
+import { GitHubCodepilot2 } from '../nodes/GitHubCodepilot2/GitHubCodepilot2.node';
+import { GitHubCodepilot2Api } from '../credentials/GitHubCodepilot2Api.credentials';
 
-describe('GitHubCodepilot Node', () => {
-	let node: GitHubCodepilot;
+describe('GitHubCodepilot2 Node', () => {
+	let node: GitHubCodepilot2;
 
 	beforeEach(() => {
-		node = new GitHubCodepilot();
+		node = new GitHubCodepilot2();
 	});
 
 	describe('Node Description', () => {
 		it('should have correct display name', () => {
-			expect(node.description.displayName).toBe('GitHub Codepilot');
+			expect(node.description.displayName).toBe('GitHub Codepilot2');
 		});
 
 		it('should have correct node name', () => {
-			expect(node.description.name).toBe('gitHubCodepilot');
+			expect(node.description.name).toBe('gitHubCodepilot2');
 		});
 
 		it('should have version 1', () => {
@@ -25,10 +25,10 @@ describe('GitHubCodepilot Node', () => {
 			expect(node.description.group).toContain('transform');
 		});
 
-		it('should require gitHubCodepilotApi credentials', () => {
+		it('should require gitHubCodepilot2Api credentials', () => {
 			const creds = node.description.credentials;
 			expect(creds).toBeDefined();
-			expect(creds![0].name).toBe('gitHubCodepilotApi');
+			expect(creds![0].name).toBe('gitHubCodepilot2Api');
 			expect(creds![0].required).toBe(true);
 		});
 
@@ -214,19 +214,19 @@ describe('GitHubCodepilot Node', () => {
 	});
 });
 
-describe('GitHubCodepilotApi Credentials', () => {
-	let credentials: GitHubCodepilotApi;
+describe('GitHubCodepilot2Api Credentials', () => {
+	let credentials: GitHubCodepilot2Api;
 
 	beforeEach(() => {
-		credentials = new GitHubCodepilotApi();
+		credentials = new GitHubCodepilot2Api();
 	});
 
 	it('should have correct credential name', () => {
-		expect(credentials.name).toBe('gitHubCodepilotApi');
+		expect(credentials.name).toBe('gitHubCodepilot2Api');
 	});
 
 	it('should have correct display name', () => {
-		expect(credentials.displayName).toBe('GitHub Codepilot API');
+		expect(credentials.displayName).toBe('GitHub Codepilot2 API');
 	});
 
 	it('should have authentication method property', () => {

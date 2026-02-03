@@ -8,23 +8,23 @@ import type {
 } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 
-export class GitHubCodepilot implements INodeType {
+export class GitHubCodepilot2 implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'GitHub Codepilot',
-		name: 'gitHubCodepilot',
-		icon: 'file:github-codepilot.svg',
+		displayName: 'GitHub Codepilot2',
+		name: 'gitHubCodepilot2',
+		icon: 'file:github-codepilot2.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		description: 'AI-powered vibecoding, workflow building, and MCP integration with GitHub Copilot',
 		defaults: {
-			name: 'GitHub Codepilot',
+			name: 'GitHub Codepilot2',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'gitHubCodepilotApi',
+				name: 'gitHubCodepilot2Api',
 				required: true,
 			},
 		],
@@ -484,7 +484,7 @@ Return only valid JSON that can be imported into n8n.`;
 					const mcpUrl = this.getNodeParameter('mcpServerUrl', i) as string;
 
 					if (operation === 'listTools') {
-						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilotApi', {
+						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilot2Api', {
 							method: 'POST' as IHttpRequestMethods,
 							url: mcpUrl,
 							body: { jsonrpc: '2.0', id: 1, method: 'tools/list' },
@@ -494,7 +494,7 @@ Return only valid JSON that can be imported into n8n.`;
 					} else if (operation === 'callTool') {
 						const toolName = this.getNodeParameter('toolName', i) as string;
 						const toolArgs = JSON.parse(this.getNodeParameter('toolArguments', i) as string);
-						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilotApi', {
+						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilot2Api', {
 							method: 'POST' as IHttpRequestMethods,
 							url: mcpUrl,
 							body: { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: toolName, arguments: toolArgs } },
@@ -502,7 +502,7 @@ Return only valid JSON that can be imported into n8n.`;
 						});
 						result.result = response.result;
 					} else if (operation === 'listResources') {
-						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilotApi', {
+						const response = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilot2Api', {
 							method: 'POST' as IHttpRequestMethods,
 							url: mcpUrl,
 							body: { jsonrpc: '2.0', id: 1, method: 'resources/list' },
@@ -591,7 +591,7 @@ Rules:
 					const mcpUrl = this.getNodeParameter('promptReviewerMcpServerUrl', i, '') as string;
 					if (mcpUrl) {
 						try {
-							const toolsResponse = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilotApi', {
+							const toolsResponse = await this.helpers.requestWithAuthentication.call(this, 'gitHubCodepilot2Api', {
 								method: 'POST' as IHttpRequestMethods,
 								url: mcpUrl,
 								body: { jsonrpc: '2.0', id: 1, method: 'tools/list' },
@@ -678,7 +678,7 @@ async function callCopilotApi(
 	userMessage: string,
 	options: IDataObject
 ): Promise<string> {
-	const response = await context.helpers.requestWithAuthentication.call(context, 'gitHubCodepilotApi', {
+	const response = await context.helpers.requestWithAuthentication.call(context, 'gitHubCodepilot2Api', {
 		method: 'POST' as IHttpRequestMethods,
 		url: 'https://models.inference.ai.azure.com/chat/completions',
 		headers: { 'Content-Type': 'application/json' },

@@ -5,9 +5,9 @@ import type {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class GitHubCodepilotApi implements ICredentialType {
-	name = 'gitHubCodepilotApi';
-	displayName = 'GitHub Codepilot API';
+export class GitHubCodepilot2Api implements ICredentialType {
+	name = 'gitHubCodepilot2Api';
+	displayName = 'GitHub Codepilot2 API';
 	documentationUrl = 'https://docs.github.com/en/copilot';
 	properties: INodeProperties[] = [
 		{

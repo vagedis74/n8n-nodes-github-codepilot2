@@ -17,15 +17,15 @@ npm run lint           # ESLint with auto-fix (nodes/ and credentials/)
 npm run format         # Prettier (nodes/ and credentials/)
 ```
 
-To run a single test file: `npx jest test/GitHubCodepilot.test.ts`
+To run a single test file: `npx jest test/GitHubCodepilot2.test.ts`
 
 ## Architecture
 
 The package exports exactly two things from `index.ts`:
 
-1. **Credential type** (`credentials/GitHubCodepilotApi.credentials.ts`) — Implements `ICredentialType` with two auth methods: Personal Access Token (default) and GitHub App (App ID + private key + installation ID). Credential test hits `/user` endpoint.
+1. **Credential type** (`credentials/GitHubCodepilot2Api.credentials.ts`) — Implements `ICredentialType` with two auth methods: Personal Access Token (default) and GitHub App (App ID + private key + installation ID). Credential test hits `/user` endpoint.
 
-2. **Node type** (`nodes/GitHubCodepilot/GitHubCodepilot.node.ts`) — Implements `INodeType` with 6 resources, each containing multiple operations:
+2. **Node type** (`nodes/GitHubCodepilot2/GitHubCodepilot2.node.ts`) — Implements `INodeType` with 6 resources, each containing multiple operations:
    - **Workflow Builder** — Generate/add/optimize/fix/explain n8n workflows
    - **Code Assistant** — Chat, generate code, review code, fix code
    - **MCP Client** — List tools, call tools, list resources from MCP servers
@@ -54,7 +54,7 @@ The `execute()` method routes on `resource` + `operation`, constructs operation-
 
 ## Testing
 
-Tests (`test/GitHubCodepilot.test.ts`) validate node and credential metadata/schema — they check that all operations, parameters, models, and configuration options are correctly defined. They do not test API execution.
+Tests (`test/GitHubCodepilot2.test.ts`) validate node and credential metadata/schema — they check that all operations, parameters, models, and configuration options are correctly defined. They do not test API execution.
 
 ## Known Issues
 
